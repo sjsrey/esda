@@ -1,17 +1,27 @@
-# coding: utf-8
+"""ESDA: Exploratory Spatial Data Analysis
+
+ESDA is an open source package for the exploratory analysis of spatial data.
+Part of the Python Spatial Analysis Library (PySAL), ESDA is under active
+development. It includes spatial analytics designed to detect global patterns
+of spatial association/autocorrelation as well as local indicators of spatial
+association (LISA) that can be used to identify hot (and cold) spots in spatial
+distributions.
+"""
+
+DOCLINES = __doc__.split("\n")
+
+with open('README.rst', 'r', encoding='utf8') as file:
+    long_description = file.read()
+
 
 from setuptools import setup, find_packages
 from distutils.command.build_py import build_py
 import os
 
-with open('README.md', 'r', encoding='utf8') as file:
-    long_description = file.read()
-
-# Get __version__ from PACKAGE_NAME/__init__.py without importing the package
+# Get __version__ from giddy/__init__.py without importing the package
 # __version__ has to be defined in the first line
 with open('esda/__init__.py', 'r') as f:
     exec(f.readline())
-
 
 # BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
 # update it when the contents of directories change.
