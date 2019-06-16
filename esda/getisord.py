@@ -4,7 +4,7 @@ Getis and Ord G statistic for spatial autocorrelation
 __author__ = "Sergio J. Rey <srey@asu.edu>, Myunghwa Hwang <mhwang4@gmail.com> "
 __all__ = ['G', 'G_Local']
 
-from libpysal.common import np, stats 
+from libpysal.common import np, stats
 from libpysal.weights.spatial_lag import lag_spatial as slag
 from .tabular import _univariate_handler
 
@@ -204,7 +204,7 @@ class G(object):
 
         See Also
         ---------
-        For further documentation, refer to the G class in pysal.esda
+        G
         """
         return _univariate_handler(df, cols, w=w, inplace=inplace, pvalue=pvalue,
                                    outvals=outvals, stat=cls,
@@ -487,7 +487,7 @@ class G_Local(object):
 
         See Also
         ---------
-        For further documentation, refer to the G_Local class in pysal.esda
+        G_Local
         """
         return _univariate_handler(df, cols, w=w, inplace=inplace, pvalue=pvalue,
                                    outvals=outvals, stat=cls,
