@@ -1626,6 +1626,34 @@ def vec_permutations_all(max_card: int, n:int, k_replications: int):
         result[k] = numpy.random.choice(n-1, size=max_card, replace=False)
     return result
 
+@njit(fastmath=True)
+def _do_one_observation(i: int,
+                        z: numpy.ndarray,
+                        permuted_ids: numpy.ndarray,
+                        weights: numpy.ndarray,
+                        start: numpy.ndarray,
+                        cardinalities: numpy.ndarray,
+                        mask: numpy.ndarray,
+                        observed: numpy.ndarray,
+                        scaling: float):
+    start_i = start[i]
+    cardinality = cardinalities[i]
+    end_i = start_i + cardinality
+    weights_i = weights[start_i:end_i]
+    z_i = z[i]
+    mask[i] = False
+    z_no_i = z[mask]
+    flat_permuted_ids = permuted_ids[:, :cardinality].flatten()
+    rstats = z_no_i[flat_permuted_ids]\
+                    .reshape(-1, cardinality)\
+                    .dot(weights_i)
+    mask[i] = True
+    rstats *= z_i * scaling
+    larger = numpy.sum(rstats >= observed[i])
+
+    return larger
+
+
 
 @njit(fastmath=True)
 def neighbors_perm_plus(
@@ -1650,28 +1678,11 @@ def neighbors_perm_plus(
     wloc = 0
 
     scaling = (n-1) / (z * z).sum()
+    start = numpy.zeros((n,), dtype=numpy.int64)
+    start[1:] = numpy.cumsum(cardinalities[:-1])
 
     for i in prange(n):
-        cardinality = cardinalities[i]
-        ### this chomps the first `cardinality` weights off of `weights`
-        weights_i = weights[wloc : (wloc + cardinality)]
-        wloc += cardinality
-        zi = z[i]
-        mask[i] = False
-        z_no_i = z[
-            mask,
-        ]
-        #------
-        flat_permuted_ids = permuted_ids[:, :cardinality].flatten()
-        rstats = z_no_i[flat_permuted_ids]\
-                       .reshape(-1, cardinality)\
-                       .dot(weights_i)
-        #------
-        mask[i] = True
-        rstats *= zi * scaling
-        if keep:
-            rlisas[i,] = rstats
-        larger[i] = numpy.sum(rstats >= observed[i])
+        larger[i] = _do_one_observation(i, z, permuted_ids, weights, start, cardinalities, mask, observed, scaling)
     return larger, rlisas
 
 def crand_plus(w, lisa, permutations, keep):
