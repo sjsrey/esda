@@ -902,6 +902,8 @@ class Moran_Local(object):
                    p-values based on standard normal approximation from
                    permutations (one-sided)
                    for two-sided tests, these values should be multiplied by 2
+    keep_simulations         : boolean
+                   If values of the statistic from the permutation based realizations are to be retained
 
     Notes
     -----
@@ -1651,7 +1653,7 @@ def _do_one_observation(i: int,
     rstats *= z_i * scaling
     larger = numpy.sum(rstats >= observed[i])
 
-    return larger
+    return larger, rstats
 
 
 
@@ -1681,8 +1683,13 @@ def neighbors_perm_plus(
     start = numpy.zeros((n,), dtype=numpy.int64)
     start[1:] = numpy.cumsum(cardinalities[:-1])
 
-    for i in prange(n):
-        larger[i] = _do_one_observation(i, z, permuted_ids, weights, start, cardinalities, mask, observed, scaling)
+    if keep:
+        for i in prange(n):
+            larger[i], rlisas[i] = _do_one_observation(i, z, permuted_ids, weights, start, cardinalities, mask, observed, scaling)
+    else:
+
+        for i in prange(n):
+            larger[i], _  = _do_one_observation(i, z, permuted_ids, weights, start, cardinalities, mask, observed, scaling)
     return larger, rlisas
 
 def crand_plus(w, lisa, permutations, keep):
