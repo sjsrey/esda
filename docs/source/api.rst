@@ -131,7 +131,7 @@ Shape Statistics
     esda.shape.isoareal_quotient
     esda.shape.isoperimetric_quotient
     esda.shape.length_width_diff
-    esda.shape.mass_moment_of_inertia
+    esda.shape.moment_of_inertia
     esda.shape.minimum_bounding_circle_ratio
     esda.shape.moa_ratio
     esda.shape.moment_of_inertia
