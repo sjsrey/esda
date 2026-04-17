@@ -17,19 +17,4 @@ help:
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
-	@rsync -r --exclude '.ipynb_checkpoints/' ../notebooks/ ./notebooks/
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-
-github:
-	@make html
-
-sync:
-
-	@rsync -avh --exclude '.nojekyll' build/html/ ../docs/ --delete
-	@make clean
-	touch ../docs/.nojekyll
-
-clean:
-	rm -rf $(BUILDDIR)/*
-	rm -rf auto_examples/
-	rm -rf generated/
