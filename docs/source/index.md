@@ -15,10 +15,10 @@ installation
 :maxdepth: 2
 
 Overview <user-guide/index>
-Global Spatial Structure <user-guide/global>
-Local Spatial Structure <user-guide/local>
+Global Spatial Autocorrelation <user-guide/global>
+Local Spatial Autocorrelation <user-guide/local>
 Spatial Diagnostics <user-guide/diagnostics>
-Geometry <user-guide/geometry>F
+Geometry <user-guide/geometry>
 Topology <user-guide/topology>
 references
 ```
@@ -26,7 +26,7 @@ references
 ```{toctree}
 :hidden:
 :caption: API
-:maxdepth: 1
+:maxdepth: 1j
 
 API reference <api>
 ```
@@ -36,7 +36,7 @@ API reference <api>
 :caption: For contributors
 :maxdepth: 1
 
-GitHub <https://github.com/pysal/libpysal>
-Changelog <https://github.com/pysal/libpysal/releases>
+GitHub <https://github.com/pysal/esda>
+Changelog <https://github.com/pysal/esda/releases>
 ```
 
