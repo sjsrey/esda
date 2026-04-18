@@ -65,6 +65,9 @@ dev = [
 ]
 docs = [
     "myst-parser",
+    "seaborn",
+    "watermark",
+    "statsmodels",
     "nbsphinx",
     "numpydoc",
     "pandoc",
