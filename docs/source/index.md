@@ -1,39 +1,42 @@
+
 ```{include} ../../README.md
 ```
 
 ```{toctree}
 :hidden:
+
 Home <self>
 installation
 ```
 
 ```{toctree}
 :hidden:
-:includehidden:
 :caption: User Guide
-:maxdepth: 1
+:maxdepth: 2
 
-Spatial Autocorrelation <user-guide/spatial_autocorrelation_for_areal_unit_data>
-Join Counts <user-guide/joincounts>
-Local Join Counts <user-guide/localjoincounts>
-Correlograms <user-guide/correlogram>
-Adbscan <user-guide/adbscan_berlin_example>
-
+Overview <user-guide/index>
+Global Spatial Structure <user-guide/global>
+Local Spatial Structure <user-guide/local>
+Spatial Diagnostics <user-guide/diagnostics>
+Geometry <user-guide/geometry>F
+Topology <user-guide/topology>
 references
 ```
 
 ```{toctree}
 :hidden:
 :caption: API
-api
+:maxdepth: 1
+
+API reference <api>
 ```
 
 ```{toctree}
 :hidden:
 :caption: For contributors
-contributing
-GitHub <https://github.com/pysal/esda>
-Changelog <https://github.com/pysal/esda/releases>
+:maxdepth: 1
 
+GitHub <https://github.com/pysal/libpysal>
+Changelog <https://github.com/pysal/libpysal/releases>
 ```
 
