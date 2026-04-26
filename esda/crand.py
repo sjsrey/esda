@@ -2,6 +2,7 @@
 Centralised conditional randomisation engine. Numba accelerated.
 """
 
+import importlib
 import os
 import warnings
 
@@ -184,17 +185,14 @@ def crand(
     max_card = cardinalities.max()
     permuted_ids = vec_permutations(max_card, n, permutations, seed)
 
-    if n_jobs != 1:
-        try:
-            import joblib  # noqa: F401
-        except (ModuleNotFoundError, ImportError):
-            warnings.warn(
-                f"Parallel processing is requested (n_jobs={n_jobs}),"
-                f" but joblib cannot be imported. n_jobs will be set"
-                f" to 1.",
-                stacklevel=2,
-            )
-            n_jobs = 1
+    if n_jobs != 1 and not importlib.util.find_spec("joblib"):
+        warnings.warn(
+            f"Parallel processing is requested (n_jobs={n_jobs}),"
+            f" but joblib cannot be imported. n_jobs will be set"
+            f" to 1.",
+            stacklevel=2,
+        )
+        n_jobs = 1
 
     if n_jobs == 1:
         p_sims, rlocals = compute_chunk(
@@ -606,6 +604,6 @@ def _prepare_bivariate(i, z, permuted_ids, weights_i):
 
 
 @njit(fastmath=True)
-def local(i, z, permuted_ids, weights_i, scaling):  # noqa: ARG001
+def local(i, z, permuted_ids, weights_i, scaling):
     raise NotImplementedError
     # returns (k_permutations,) array of random statistics for observation i

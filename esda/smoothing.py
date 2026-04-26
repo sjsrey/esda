@@ -65,7 +65,7 @@ __all__ = [
 ]
 
 
-def flatten(l, unique=True):  # noqa: E741
+def flatten(l, unique=True):  # noqa: E741 - Ambiguous variable name: `l`
     """flatten a list of lists
 
     Parameters
@@ -93,7 +93,7 @@ def flatten(l, unique=True):  # noqa: E741
     [1, 2, 3, 4, 5, 6]
 
     """
-    l = reduce(lambda x, y: x + y, l)  # noqa: E741
+    l = reduce(lambda x, y: x + y, l)  # noqa: E741 - Ambiguous variable name: `l`
     if not unique:
         return list(l)
     return list(set(l))
@@ -145,7 +145,7 @@ def weighted_median(d, w):
     cumsum_threshold = reordered_w[-1] * 1.0 / 2
     median_inx = (reordered_w >= cumsum_threshold).nonzero()[0][0]
     if reordered_w[median_inx] == cumsum_threshold and len(d) - 1 > median_inx:
-        return np.sort(d)[median_inx : median_inx + 2].mean()  # noqa: E203
+        return np.sort(d)[median_inx : median_inx + 2].mean()
     return np.sort(d)[median_inx]
 
 
@@ -193,7 +193,7 @@ def sum_by_n(d, w, n):
     t = len(d)
     h = t // n  # must be floor!
     d = d * w
-    return np.array([sum(d[i : i + h]) for i in range(0, t, h)])  # noqa: E203
+    return np.array([sum(d[i : i + h]) for i in range(0, t, h)])
 
 
 def crude_age_standardization(e, b, n):
@@ -322,7 +322,7 @@ def direct_age_standardization(e, b, s, n, alpha=0.05):
     g_b = var_estimate / adjusted_r
     _b = len(b)
     _rb = range(0, _b, _b // n)
-    k = [age_weight[i : i + _b // n].max() for i in _rb]  # noqa: E203
+    k = [age_weight[i : i + _b // n].max() for i in _rb]
     g_a_k = np.square(adjusted_r + k) / (var_estimate + np.square(k))
     g_b_k = (var_estimate + np.square(k)) / (adjusted_r + k)
     res = []
@@ -686,7 +686,7 @@ class _Smoother:
             df[outcol] = cls(ei, bi, **kwargs).r
 
 
-class Excess_Risk(_Smoother):  # noqa: N801
+class Excess_Risk(_Smoother):
     """Excess Risk
 
     Parameters
@@ -742,7 +742,7 @@ class Excess_Risk(_Smoother):  # noqa: N801
         self.r = e * 1.0 / (b * r_mean)
 
 
-class Empirical_Bayes(_Smoother):  # noqa: N801
+class Empirical_Bayes(_Smoother):
     """Aspatial Empirical Bayes Smoothing
 
     Parameters
@@ -807,7 +807,7 @@ class Empirical_Bayes(_Smoother):  # noqa: N801
         self.r = weight * rate + (1.0 - weight) * r_mean
 
 
-class _Spatial_Smoother(_Smoother):  # noqa: N801
+class _Spatial_Smoother(_Smoother):
     """
     This is a helper class that implements things that all the things that
     spatial smoothers should do.
@@ -901,7 +901,7 @@ class _Spatial_Smoother(_Smoother):  # noqa: N801
             df[outcol] = cls(ei, bi, w=wi, **kwargs).r
 
 
-class Spatial_Empirical_Bayes(_Spatial_Smoother):  # noqa: N801
+class Spatial_Empirical_Bayes(_Spatial_Smoother):
     """Spatial Empirical Bayes Smoothing
 
     Parameters
@@ -989,7 +989,7 @@ class Spatial_Empirical_Bayes(_Spatial_Smoother):  # noqa: N801
         self.r = r_mean + (rate - r_mean) * (r_var / (r_var + (r_mean / b)))
 
 
-class Spatial_Rate(_Spatial_Smoother):  # noqa: N801
+class Spatial_Rate(_Spatial_Smoother):
     """Spatial Rate Smoothing
 
     Parameters
@@ -1064,7 +1064,7 @@ class Spatial_Rate(_Spatial_Smoother):  # noqa: N801
             w.transform = "o"
 
 
-class Kernel_Smoother(_Spatial_Smoother):  # noqa: N801
+class Kernel_Smoother(_Spatial_Smoother):
     """Kernal smoothing
 
     Parameters
@@ -1134,7 +1134,7 @@ class Kernel_Smoother(_Spatial_Smoother):  # noqa: N801
             self.r = w_e / w_b
 
 
-class Age_Adjusted_Smoother(_Spatial_Smoother):  # noqa: N801
+class Age_Adjusted_Smoother(_Spatial_Smoother):
     """Age-adjusted rate smoothing
 
     Parameters
@@ -1314,7 +1314,7 @@ class Age_Adjusted_Smoother(_Spatial_Smoother):  # noqa: N801
         return rdf
 
 
-class Disk_Smoother(_Spatial_Smoother):  # noqa: N801
+class Disk_Smoother(_Spatial_Smoother):
     """Locally weighted averages or disk smoothing
 
     Parameters
@@ -1391,7 +1391,7 @@ class Disk_Smoother(_Spatial_Smoother):  # noqa: N801
             self.r = slag(w, r) / np.array(weight_sum).reshape(-1, 1)
 
 
-class Spatial_Median_Rate(_Spatial_Smoother):  # noqa: N801
+class Spatial_Median_Rate(_Spatial_Smoother):
     """Spatial Median Rate Smoothing
 
     Parameters
@@ -1519,7 +1519,7 @@ class Spatial_Median_Rate(_Spatial_Smoother):  # noqa: N801
         self.r = np.asarray(new_r).reshape(r.shape)
 
 
-class Spatial_Filtering(_Smoother):  # noqa: N801
+class Spatial_Filtering(_Smoother):
     """Spatial Filtering
 
     Parameters
@@ -1622,8 +1622,8 @@ class Spatial_Filtering(_Smoother):  # noqa: N801
         x_range = bbox[1][0] - bbox[0][0]
         y_range = bbox[1][1] - bbox[0][1]
         x, y = np.mgrid[
-            bbox[0][0] : bbox[1][0] : float(x_range) / x_grid,  # noqa: E203
-            bbox[0][1] : bbox[1][1] : float(y_range) / y_grid,  # noqa: E203
+            bbox[0][0] : bbox[1][0] : float(x_range) / x_grid,
+            bbox[0][1] : bbox[1][1] : float(y_range) / y_grid,
         ]
         self.grid = list(zip(x.ravel(), y.ravel(), strict=True))
         self.r = []
@@ -1715,7 +1715,7 @@ class Spatial_Filtering(_Smoother):  # noqa: N801
         return outdf
 
 
-class Headbanging_Triples:  # noqa: N801
+class Headbanging_Triples:
     """Generate a pseudo spatial weights instance that contains headbanging triples
 
     Parameters
@@ -1929,7 +1929,7 @@ class Headbanging_Triples:  # noqa: N801
                 self.extra[ps[point]] = extra
 
 
-class Headbanging_Median_Rate:  # noqa: N801
+class Headbanging_Median_Rate:
     """Headbaning Median Rate Smoothing
 
     Parameters
