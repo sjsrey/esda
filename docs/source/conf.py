@@ -5,8 +5,7 @@ from packaging.version import Version
 
 sys.path.insert(0, os.path.abspath("../../"))
 
-import esda  # noqa E402
-
+import esda
 
 project = "esda"
 copyright = "2018-, pysal developers"  # noqa: A001 - shadowing a Python builtin

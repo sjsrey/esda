@@ -1,4 +1,3 @@
-import contextlib
 import warnings
 
 import geopandas
@@ -7,7 +6,7 @@ import pandas
 import shapely
 from packaging.version import Version
 
-from .crand import njit, prange
+from .crand import njit
 
 __author__ = (
     "Martin Fleischmann <martin@fleischmann.net>",

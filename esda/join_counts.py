@@ -20,7 +20,7 @@ __all__ = ["Join_Counts"]
 PERMUTATIONS = 999
 
 
-class Join_Counts:  # noqa: N801
+class Join_Counts:
     """Binary Join Counts
 
 

@@ -15,7 +15,7 @@ dsupport = [i + 500 for i in range(0, 2000, 500)]
 ksupport = list(range(1, 6))
 
 try:
-    import statsmodels  # noqa F401
+    import statsmodels
 except ImportError:
     statsmodels = None
 
