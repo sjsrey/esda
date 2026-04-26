@@ -10,6 +10,7 @@ import esda  # noqa E402
 
 project = "esda"
 copyright = "2018-, pysal developers"  # noqa: A001 - shadowing a Python builtin
+
 author = "pysal developers"
 
 version = Version(esda.__version__).public  # remove commit hash
