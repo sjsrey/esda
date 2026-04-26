@@ -245,7 +245,7 @@ class G:
         )
 
 
-class G_Local:  # noqa: N801
+class G_Local:
     """
     Generalized Local G Autocorrelation
 
@@ -485,7 +485,7 @@ class G_Local:  # noqa: N801
         larger[below] = self.permutations - larger[below]
         self.p_sim = (larger + 1) / (self.permutations + 1)
 
-    def __getCardinalities(self):  # noqa: N802
+    def __getCardinalities(self):
         if isinstance(self.w, W):
             ido = self.w.id_order
             self.wc = np.array([self.w.cardinalities[ido[i]] for i in range(self.n)])

@@ -9,7 +9,7 @@ try:
     from tqdm.auto import tqdm
 except ImportError:
 
-    def tqdm(x, **kwargs):  # noqa: ARG001
+    def tqdm(x, **kwargs):  # noqa: ARG001 - Unused function argument: `kwargs`
         return x
 
 

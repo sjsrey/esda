@@ -87,6 +87,7 @@ lint.select = ["E", "F", "W", "I", "UP", "N", "B", "A", "C4", "SIM", "ARG"]
 lint.ignore = [
     "B006",  # Do not use mutable data structures for argument defaults
     "C408",  # Unnecessary `*` call (rewrite as a literal)
+    "N801",  # Class name `*` should use CapWords convention
     "N802",  # Function name `*` should be lowercase
     "N803",  # Argument name * should be lowercase
     "N806",  # Variable * in function should be lowercase
