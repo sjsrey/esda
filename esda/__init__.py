@@ -44,6 +44,7 @@ from .silhouettes import boundary_silhouette, path_silhouette
 from .smaup import Smaup
 from .topo import isolation, prominence
 from .util import fdr
+from .fdr import SpatialFDR
 
 with contextlib.suppress(PackageNotFoundError):
     __version__ = version("esda")
