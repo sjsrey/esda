@@ -2,6 +2,8 @@ import numpy as np
 import scipy.sparse as sparse
 import scipy.sparse.linalg as spla
 
+from .aple import APLE
+
 
 class SpatialFDR:
     """
@@ -34,15 +36,18 @@ class SpatialFDR:
                 f"Shape mismatch: Ensure pvalues ({len(self.pvalues)}), "
                 f"y ({len(self.y)}), and graph nodes ({self.graph.n}) match."
             )
+        y_arr = np.asarray(y)
+
+        if np.var(y_arr) < 1e-10:
+            raise ValueError(
+                "Input array 'y' must have a non-zero variance. "
+                "The provided array is constant or contains insufficient variation."
+            )
 
         self._fit()
 
     def _fit(self):
         n = self.graph.n
-
-        # 1. Estimate Rho via Analytical APLE on the SPATIAL VARIABLE y
-        # Center the spatial variable as required by APLE
-        y_centered = self.y - np.mean(self.y)
 
         if self.transform == "R":
             W = self.graph.transform("R").sparse
@@ -51,20 +56,8 @@ class SpatialFDR:
         else:
             raise ValueError("Transform must be 'R' or 'B'.")
 
-        Wy = W.dot(y_centered)
-        numerator = y_centered.dot(Wy)
+        self.rho = APLE(self.y, W).statistic_
 
-        WTW = W.T @ W
-        WW = W @ W
-        tr_term = WTW.diagonal().sum() + WW.diagonal().sum()
-        denominator = (1.0 / n) * tr_term * y_centered.dot(y_centered)
-
-        if denominator == 0:
-            self.rho = 0.0
-        else:
-            self.rho = float(numerator / denominator)
-
-        # 2. Calculate n_eff using sequential sparse linear system solves
         I = sparse.eye(n, format="csr")
         A = I - self.rho * W
         ones = np.ones(n)

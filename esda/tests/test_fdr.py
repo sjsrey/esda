@@ -4,6 +4,8 @@ import scipy.sparse as sparse
 import scipy.sparse.linalg as spla
 
 from esda.fdr import SpatialFDR
+from libpysal.weights import lat2W
+from libpysal.graph import Graph
 
 
 class MockGraph:
@@ -11,6 +13,7 @@ class MockGraph:
 
     def __init__(self, n, matrix_type="symmetric"):
         self.n = n
+
         if matrix_type == "symmetric":
             W_raw = np.zeros((n, n))
             for i in range(n):
@@ -55,9 +58,10 @@ def test_spatial_fdr_zero_variance_handling():
     pvalues = np.ones(n) * 0.05
     y_flat = np.ones(n) * 10.0  # Perfectly flat spatial field
 
-    fdr = SpatialFDR(pvalues, y_flat, graph)
-    assert fdr.rho == 0.0
-    assert fdr.n_eff == float(n)
+    with pytest.raises(
+        ValueError, match="Input array 'y' must have a non-zero variance. "
+    ):
+        fdr = SpatialFDR(pvalues, y_flat, graph)
 
 
 def test_spatial_fdr_neff_ceilings():
