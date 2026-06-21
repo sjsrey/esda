@@ -2,8 +2,7 @@
 Approximate Profile-Likelihood Estimator (APLE) for Spatial Dependence.
 
 This module implements the APLE statistic, a closed-form estimator for the
-spatial-dependence parameter (:math:`\\rho`) in a Spatial Autoregressive (SAR)
-model[cite: 39, 40].
+spatial-dependence parameter (:math:`\\rho`) in a Spatial Autoregressive (SAR).
 
 While Moran's I is widely used in exploratory spatial data analysis (ESDA), it
 is known to be a poor estimator of the spatial dependence parameter :math:`\\rho`
@@ -69,6 +68,13 @@ class APLE:
         Generates an APLE scatterplot, a visualization tool that plots
         transformed signal Y against X, analogous to the Moran scatterplot
         but more informative for assessing spatial autocorrelation.
+
+
+    References
+    ----------
+    .. [1] Li, H., Calder, C. A., & Cressie, N. (2007). Beyond Moran's I:
+       Testing for Spatial Dependence Based on the Spatial Autoregressive Model.
+       Geographical Analysis, 39(4), 357-375.
     """
 
     def __init__(self, X, W, trace=True):
