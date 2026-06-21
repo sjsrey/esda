@@ -1,11 +1,76 @@
+"""
+Approximate Profile-Likelihood Estimator (APLE) for Spatial Dependence.
+
+This module implements the APLE statistic, a closed-form estimator for the
+spatial-dependence parameter (:math:`\\rho`) in a Spatial Autoregressive (SAR)
+model[cite: 39, 40].
+
+While Moran's I is widely used in exploratory spatial data analysis (ESDA), it
+is known to be a poor estimator of the spatial dependence parameter :math:`\\rho`
+when the true value is not near zero. The APLE statistic
+serves as a computationally efficient, closed-form alternative that
+demonstrates superior performance in estimating :math:`\\rho` across a
+broader range of values compared to Moran's I and Ord's statistic.
+
+This module also provides an APLE scatterplot, an ESDA tool analogous to the
+Moran scatterplot, designed to better visualize the strength of spatial
+autocorrelation.
+
+References
+----------
+.. [1] Li, H., Calder, C. A., & Cressie, N. (2007). Beyond Moran's I:
+   Testing for Spatial Dependence Based on the Spatial Autoregressive Model.
+   Geographical Analysis, 39(4), 357-375.
+"""
+
 import numpy as np
 import libpysal
 from scipy import sparse
 from scipy.sparse.linalg import eigsh
 import matplotlib.pyplot as plt
 
+__all__ = ["APLE"]
+
 
 class APLE:
+    """
+    Approximate Profile-Likelihood Estimator (APLE) for the SAR model spatial dependence parameter.
+
+    The APLE statistic provides a closed-form estimator for the spatial dependence
+    parameter :math:`\\rho` in a Spatial Autoregressive (SAR) model.
+
+
+    Parameters
+    ----------
+    X : array-like
+        The spatial variable (observations on a lattice).
+    W : libpysal.weights.W, libpysal.graph.Graph, or scipy.sparse matrix
+        The spatial neighborhood matrix defining the connectivity of the lattice.
+    trace : bool, default=True
+        If True, calculates the sum of squared eigenvalues using the trace of
+        the squared weights matrix :math:`W^2`. If False, computes eigenvalues
+        directly, which is computationally more expensive.
+
+    Attributes
+    ----------
+    statistic_ : float
+        The calculated APLE statistic.
+    n : int
+        The number of observations.
+    Z : ndarray
+        The detrended observations (X - mean(X)).
+    A : scipy.sparse matrix
+        The pre-computed denominator matrix :math:`W^T W + (\\lambda^T \\lambda / n) I`
+        used in the APLE calculation.
+
+    Methods
+    -------
+    plot()
+        Generates an APLE scatterplot, a visualization tool that plots
+        transformed signal Y against X, analogous to the Moran scatterplot
+        but more informative for assessing spatial autocorrelation.
+    """
+
     def __init__(self, X, W, trace=True):
         # Explicitly store X, then derive Z
         self.X = np.asanyarray(X).flatten()
@@ -27,6 +92,12 @@ class APLE:
     def _normalize_w(self, W):
         if isinstance(W, (libpysal.weights.W, libpysal.graph.Graph)):
             return W.sparse
+        elif isinstance(W, sparse.spmatrix):
+            return W
+        else:
+            raise ValueError(
+                "W must be a libpysal.weights.W, libpysal.graph.Graph, or scipy.sparse matrix."
+            )
         return sparse.csr_matrix(W)
 
     def _compute_pre(self):
@@ -94,7 +165,7 @@ if __name__ == "__main__":
     import geopandas as gpd
     import libpysal
 
-    # The URL to the CSV file
+    # The URL to the CSV file for the Mercer and Hall wheat data
     url = "https://hpc.niasra.uow.edu.au/ckan/dataset/5d8398c1-d090-44f3-acda-cffacb38d80d/resource/9f0d148f-e7c2-4a04-a1e2-62c021966abb/download/wheat.csv"
 
     # Load the data into a DataFrame

@@ -8,6 +8,7 @@ import contextlib
 from importlib.metadata import PackageNotFoundError, version
 
 from . import adbscan, shape
+from .aple import APLE
 from .correlogram import correlogram
 from .gamma import Gamma
 from .geary import Geary
